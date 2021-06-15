@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Service;
+namespace Peeperklip\GitConnector;
 
 use GuzzleHttp\Client;
-use Throwable;
 
 class GithubFetcher
 {
@@ -12,6 +11,7 @@ class GithubFetcher
 
     public function __construct()
     {
+        //https://api.github.com/
         $this->fetchFrom = 'https://api.github.com/users/peeperklip/repos';
         $this->gists = 'https://api.github.com/users/peeperklip/gists';
     }
@@ -31,16 +31,16 @@ class GithubFetcher
         $client = new Client();
 
         try {
-            if (file_exists(__DIR__ . '/' . $type)) {
-                return file_get_contents(__DIR__ . '/'.$type);
+            if (file_exists(__DIR__ . 'GithubFetcher.php/' . $type)) {
+                return file_get_contents(__DIR__ . 'GithubFetcher.php/' .$type);
             }
 
             $response = $client->request("GET", $fetchFrom);
             $content = $response->getBody()->getContents();
 
-            file_put_contents(__DIR__ . '/' . $type, $content);
+            file_put_contents(__DIR__ . 'GithubFetcher.php/' . $type, $content);
             return $content;
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             return '{}';
         }
     }
